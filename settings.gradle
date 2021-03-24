@@ -1,0 +1,3 @@
+include ':contentproviderex'
+include ':app'
+rootProject.name = "BroadcastReceiveEx"
