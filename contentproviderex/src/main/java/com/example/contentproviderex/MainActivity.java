@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.provider.ContactsContract;
 import android.telecom.Call;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +20,7 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity implements AutoPermissionsListener {
 
-    Button btnCall;
+    Button btnCall, btnAddress;
     TextView tvResult;
 
     @Override
@@ -27,11 +28,18 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnCall=findViewById(R.id.btncall);
+        btnAddress=findViewById(R.id.btnAddress);
         tvResult=findViewById(R.id.tvResult);
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tvResult.setText(getCallHistory());
+            }
+        });
+        btnAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tvResult.setText(getAddress());
             }
         });
         AutoPermissions.Companion.loadAllPermissions(this, 100);
@@ -62,6 +70,22 @@ public class MainActivity extends AppCompatActivity implements AutoPermissionsLi
             cursor.close();
             return  callBuff.toString();
         }
+    }
+
+    //통화기록 가져오는 메소드
+    String getAddress(){
+        Cursor cursor=getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                null,null,null,null);
+        String strAddress="이름       전화번호\n";
+        String name, phoneNumber;
+        while(cursor.moveToNext()){
+            name=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)); //주소록 이름 가져오기
+            phoneNumber=cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)); //주소록 번호 가져오기
+            strAddress+=name+"      "+ phoneNumber+"\n";
+        }
+        cursor.close();
+        return strAddress;
+
     }
 
     @Override

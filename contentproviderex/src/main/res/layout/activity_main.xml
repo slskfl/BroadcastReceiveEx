@@ -12,6 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="통화기록 가져오기"/>
+    <Button
+        android:id="@+id/btnAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="주소록 가져오기"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
